@@ -1,7 +1,7 @@
 # To-do API
 
-API REST para gerenciamento de tarefas desenvolvida em Go, utilizando exclusivamente a biblioteca padrao (net/http) com roteamento nativo e armazenamento em memoria thread-safe com sync.RWMutex.
-Com o tempo pretendo adicionar mais funcionalidades ao projeto, como banco de dados (Postgres), validacoes com `go-playground/validator`, interface, testes, configuracoes e container
+API REST para gerenciamento de tarefas desenvolvida em Go, utilizando exclusivamente a biblioteca padrao (`net/http`) com roteamento nativo e armazenamento em memoria thread-safe com `sync.RWMutex`.
+
 ---
 
 ## Pre-requisitos
@@ -34,16 +34,16 @@ A API iniciara a escuta no endereco `http://localhost:8080`.
 
 ## Como Executar os Testes
 
-Com o servidor em execucao no primeiro terminal, abra uma nova janela ou aba no mesmo diretorio e execute:
+Com o servidor em execucao, abra uma nova janela ou aba no mesmo diretorio e execute:
 
 ```bash
-hurl --test tasks.hurl
+hurl --test --variable host=http://localhost:8080 tests/api.hurl
 ```
 
 Para inspecionar detalhadamente todas as requisicoes, cabecalhos e corpos de resposta:
 
 ```bash
-hurl --verbose tasks.hurl
+hurl --verbose --test --variable host=http://localhost:8080 tests/api.hurl
 ```
 
 ---
@@ -179,15 +179,28 @@ Quando ocorre um erro de validacao (ex.: titulo em branco, JSON malformado) ou r
 │   └── task.go
 ├── store/
 │   └── task.go
+├── tests/
+│   └── api.hurl
 ├── go.mod
 ├── main.go
-├── tasks.hurl
 └── README.md
 ```
 
 - `handlers/`: Implementacao dos adaptadores HTTP, parsing de rotas, validacoes e codificacao JSON.
 - `models/`: Definicoes dos esquemas de dados e structs de dominio.
 - `store/`: Persistencia em memoria com controle de concorrencia atraves de `sync.RWMutex`.
+- `tests/`: Suite automatizada de testes declarativos com Hurl.
 - `main.go`: Ponto de entrada responsavel por inicializar os modulos, injetar dependencias e subir o servidor HTTP.
-- `tasks.hurl`: Suite automatizada de testes declarativos com Hurl.
 
+---
+
+## Roadmap
+
+Planejamento de evolucao da aplicacao:
+
+- [ ] Persistencia com PostgreSQL
+- [ ] Validacoes avancadas de payload via `go-playground/validator`
+- [ ] Gerenciamento de variaveis de ambiente e configuracoes centralizadas
+- [ ] Testes unitarios nativos com pacote `testing` e benchmarks
+- [ ] Conteinerizacao da aplicacao com Docker e Docker Compose
+- [ ] Interface visual basica para consumo da API
